@@ -14,6 +14,9 @@ model = Ebooks::Model.load("model/" + config['text_model_name'] + ".model")
 # https://github.com/mispy/ebooks_example
 DELAY = 10..60
 
+# Track who we've randomly interacted with globally
+$have_talked = {}
+
 Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.consumer_key = config['consumer_key']
   bot.consumer_secret = config['consumer_secret']
@@ -23,6 +26,10 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.on_mention do |tweet, meta|
     next if tweet[:user][:screen_name].include?(config['robot_id']) && rand > 0.05
     next if rand < 0.05
+
+    # Any given user will receive at most one random interaction per day
+    next if $have_talked[tweet[:user][:screen_name]]
+    $have_talked[tweet[:user][:screen_name]] = true
 
     # Reply to a mention
     length = tweet[:text].length + meta[:reply_prefix].length
@@ -49,5 +56,6 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.scheduler.every '24h' do
     # Tweet something every 24 hours
     bot.tweet(model.make_statement(140))
+    $have_talked = {}
   end
 end
