@@ -8,16 +8,16 @@ require 'yaml'
 config = YAML::load_file('config.yml')
 
 # Choose which text model we want to use
-model = Ebooks::Model.load("model/everycopy.model")
+model = Ebooks::Model.load("model/" + config['text_model_name'] + ".model")
 
-Ebooks::Bot.new("copyevery") do |bot|
+Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.consumer_key = config['consumer_key']
   bot.consumer_secret = config['consumer_secret']
   bot.oauth_token = config['oauth_token']
   bot.oauth_token_secret = config['oauth_token_secret']
 
   bot.on_mention do |tweet, meta|
-    next if tweet[:user][:screen_name].include?('ebooks') && rand > 0.05
+    next if tweet[:user][:screen_name].include?(config['robot_id']) && rand > 0.05
     next if rand < 0.05
 
     # Reply to a mention
