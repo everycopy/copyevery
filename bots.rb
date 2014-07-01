@@ -24,6 +24,7 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.oauth_token_secret = config['oauth_token_secret']
 
   bot.on_mention do |tweet, meta|
+    # Avoid infinite reply chains (very small chance of crosstalk)
     next if tweet[:user][:screen_name].include?(config['robot_id']) && rand > 0.05
     next if rand < 0.05
 
