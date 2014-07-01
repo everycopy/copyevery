@@ -17,13 +17,23 @@ Ebooks::Bot.new("copyevery") do |bot|
   bot.oauth_token_secret = config['oauth_token_secret']
 
   bot.on_mention do |tweet, meta|
+    next if tweet[:user][:screen_name].include?('ebooks') && rand > 0.05
+    next if rand < 0.05
+
     # Reply to a mention
-    bot.reply(tweet, meta[:reply_prefix] + model.make_statement(100))
+    length = tweet[:text].length + meta[:reply_prefix].length
+    response = model.make_response(tweet[:text], 140 - length)
+    bot.reply(tweet, meta[:reply_prefix] + response)
   end
 
   bot.on_timeline do |tweet, meta|
+    next if tweet[:retweeted_status] || tweet[:text].start_with?('RT')
+    next unless rand < 0.05
+
     # Reply to a tweet in the bot's timeline
-    bot.reply(tweet, meta[:reply_prefix] + model.make_statement(100))
+    length = tweet[:text].length + meta[:reply_prefix].length
+    response = model.make_response(tweet[:text], 140 - length)
+    bot.reply(tweet, meta[:reply_prefix] + response)
   end
 
   bot.scheduler.every '24h' do
