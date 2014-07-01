@@ -7,7 +7,7 @@ require 'yaml'
 # https://github.com/waferbaby/waferbot/blob/master/bots.rb
 config = YAML::load_file('config.yml')
 
-Ebooks::Bot.new("bot") do |bot|
+Ebooks::Bot.new("copyevery") do |bot|
   bot.consumer_key = config['consumer_key']
   bot.consumer_secret = config['consumer_secret']
   bot.oauth_token = config['oauth_token']
