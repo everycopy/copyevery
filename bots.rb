@@ -13,16 +13,6 @@ Ebooks::Bot.new("bot") do |bot|
   bot.oauth_token = config['oauth_token']
   bot.oauth_token_secret = config['oauth_token_secret']
 
-  bot.on_message do |dm|
-    # Reply to a DM
-    # bot.reply(dm, "secret secrets")
-  end
-
-  bot.on_follow do |user|
-    # Follow a user back
-    # bot.follow(user[:screen_name])
-  end
-
   bot.on_mention do |tweet, meta|
     # Reply to a mention
     model = Ebooks::Model.load("model/everycopy.model")
