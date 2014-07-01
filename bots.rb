@@ -12,7 +12,7 @@ model = Ebooks::Model.load("model/" + config['text_model_name'] + ".model")
 
 # Simulated human reply delay range in seconds
 # https://github.com/mispy/ebooks_example
-DELAY = 10..60
+DELAY = 10..30
 
 # Track who we've randomly interacted with globally
 $have_talked = {}
