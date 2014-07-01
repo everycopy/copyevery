@@ -25,17 +25,19 @@ Ebooks::Bot.new("bot") do |bot|
 
   bot.on_mention do |tweet, meta|
     # Reply to a mention
-    # bot.reply(tweet, meta[:reply_prefix] + "oh hullo")
+    model = Ebooks::Model.load("model/everycopy.model")
+    bot.reply(tweet, meta[:reply_prefix] + model.make_statement(100))
   end
 
   bot.on_timeline do |tweet, meta|
     # Reply to a tweet in the bot's timeline
-    # bot.reply(tweet, meta[:reply_prefix] + "nice tweet")
+    model = Ebooks::Model.load("model/everycopy.model")
+    bot.reply(tweet, meta[:reply_prefix] + model.make_statement(100))
   end
 
   bot.scheduler.every '24h' do
     # Tweet something every 24 hours
-    # See https://github.com/jmettraux/rufus-scheduler
-    # bot.tweet("hi")
+    model = Ebooks::Model.load("model/everycopy.model")
+    bot.tweet(model.make_statement(140))
   end
 end
