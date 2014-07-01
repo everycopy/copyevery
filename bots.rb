@@ -7,6 +7,9 @@ require 'yaml'
 # https://github.com/waferbaby/waferbot/blob/master/bots.rb
 config = YAML::load_file('config.yml')
 
+# Choose which text model we want to use
+model = Ebooks::Model.load("model/everycopy.model")
+
 Ebooks::Bot.new("copyevery") do |bot|
   bot.consumer_key = config['consumer_key']
   bot.consumer_secret = config['consumer_secret']
@@ -15,19 +18,16 @@ Ebooks::Bot.new("copyevery") do |bot|
 
   bot.on_mention do |tweet, meta|
     # Reply to a mention
-    model = Ebooks::Model.load("model/everycopy.model")
     bot.reply(tweet, meta[:reply_prefix] + model.make_statement(100))
   end
 
   bot.on_timeline do |tweet, meta|
     # Reply to a tweet in the bot's timeline
-    model = Ebooks::Model.load("model/everycopy.model")
     bot.reply(tweet, meta[:reply_prefix] + model.make_statement(100))
   end
 
   bot.scheduler.every '24h' do
     # Tweet something every 24 hours
-    model = Ebooks::Model.load("model/everycopy.model")
     bot.tweet(model.make_statement(140))
   end
 end
