@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 
 require 'twitter_ebooks'
+require 'yaml'
+
+# Put the keys and whatnot in their own config file like waferbaby does
+# https://github.com/waferbaby/waferbot/blob/master/bots.rb
+config = YAML::load_file('config.yml')
 
 # This is an example bot definition with event handlers commented out
 # You can define as many of these as you like; they will run simultaneously
@@ -8,10 +13,10 @@ require 'twitter_ebooks'
 Ebooks::Bot.new("bot") do |bot|
   # Consumer details come from registering an app at https://dev.twitter.com/
   # OAuth details can be fetched with https://github.com/marcel/twurl
-  bot.consumer_key = "" # Your app consumer key
-  bot.consumer_secret = "" # Your app consumer secret
-  bot.oauth_token = "" # Token connecting the app to this account
-  bot.oauth_token_secret = "" # Secret connecting the app to this account
+  bot.consumer_key = config['consumer_key']
+  bot.consumer_secret = config['consumer_secret']
+  bot.oauth_token = config['oauth_token']
+  bot.oauth_token_secret = config['oauth_token_secret']
 
   bot.on_message do |dm|
     # Reply to a DM
