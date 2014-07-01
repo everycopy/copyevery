@@ -10,6 +10,10 @@ config = YAML::load_file('config.yml')
 # Choose which text model we want to use
 model = Ebooks::Model.load("model/" + config['text_model_name'] + ".model")
 
+# Simulated human reply delay range in seconds
+# https://github.com/mispy/ebooks_example
+DELAY = 10..60
+
 Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.consumer_key = config['consumer_key']
   bot.consumer_secret = config['consumer_secret']
@@ -23,7 +27,10 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
     # Reply to a mention
     length = tweet[:text].length + meta[:reply_prefix].length
     response = model.make_response(tweet[:text], 140 - length)
-    bot.reply(tweet, meta[:reply_prefix] + response)
+
+    bot.delay DELAY do
+      bot.reply(tweet, meta[:reply_prefix] + response)
+    end
   end
 
   bot.on_timeline do |tweet, meta|
@@ -33,7 +40,10 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
     # Reply to a tweet in the bot's timeline
     length = tweet[:text].length + meta[:reply_prefix].length
     response = model.make_response(tweet[:text], 140 - length)
-    bot.reply(tweet, meta[:reply_prefix] + response)
+
+    bot.delay DELAY do
+      bot.reply(tweet, meta[:reply_prefix] + response)
+    end
   end
 
   bot.scheduler.every '24h' do
