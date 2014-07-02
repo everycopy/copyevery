@@ -1,0 +1,12 @@
+# Consumer and OAuth keys from Twitter
+# https://apps.twitter.com/
+consumer_key:
+consumer_secret:
+oauth_token:
+oauth_token_secret:
+
+# Some sensible bits and pieces from the ebooks_example
+# https://github.com/mispy/ebooks_example
+robot_id:  # Avoid infinite reply chains
+twitter_username:  # Ebooks account username
+text_model_name:  # This should be the name of the text model
