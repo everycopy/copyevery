@@ -23,6 +23,22 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
   bot.oauth_token = config['oauth_token']
   bot.oauth_token_secret = config['oauth_token_secret']
 
+  bot.on_message do |dm|
+    # Reply to a DM
+    length = dm[:text].length
+
+    bot.delay DELAY do
+      bot.reply(dm, model.make_response(dm[:text], 140-length))
+    end
+  end
+
+  bot.on_follow do |user|
+    # Follow a user back
+    bot.delay DELAY do
+      bot.follow(user[:screen_name])
+    end
+  end
+
   bot.on_mention do |tweet, meta|
     # Avoid infinite reply chains (very small chance of crosstalk)
     next if tweet[:user][:screen_name].include?(config['robot_id']) && rand > 0.05
