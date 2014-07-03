@@ -70,7 +70,7 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
     end
   end
 
-  bot.scheduler.every '24h' do
+  bot.scheduler.every '12h' do
     # Tweet something every 24 hours
     bot.tweet(model.make_statement(140))
     $have_talked = {}
