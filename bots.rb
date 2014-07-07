@@ -57,19 +57,6 @@ Ebooks::Bot.new(config['twitter_username']) do |bot|
     end
   end
 
-  bot.on_timeline do |tweet, meta|
-    next if tweet[:retweeted_status] || tweet[:text].start_with?('RT')
-    next unless rand < 0.05
-
-    # Reply to a tweet in the bot's timeline
-    length = tweet[:text].length + meta[:reply_prefix].length
-    response = model.make_response(tweet[:text], 140 - length)
-
-    bot.delay DELAY do
-      bot.reply(tweet, meta[:reply_prefix] + response)
-    end
-  end
-
   bot.scheduler.every '12h' do
     # Tweet something every 24 hours
     bot.tweet(model.make_statement(140))
